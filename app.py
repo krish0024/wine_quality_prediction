@@ -136,5 +136,3 @@ fig, ax = plt.subplots(figsize=(10, 6))
 sns.heatmap(data.corr(), annot=True, cmap='coolwarm', ax=ax)
 st.pyplot(fig)
 
-st.subheader("Model Comparison")
-st.write("This section can be used to compare multiple models if available.")
