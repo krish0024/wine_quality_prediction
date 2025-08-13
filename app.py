@@ -99,4 +99,42 @@ def user_input_features():
     return pd.DataFrame(features, index=[0])
 
 input_df = user_input_features()
-st.su
+st.subheader('User Input Features')
+st.write(input_df)
+
+# Scale and predict
+if scaler:
+    scaled = scaler.transform(input_df)
+else:
+    scaled = input_df.values
+prediction = model.predict(scaled)
+st.subheader('Predicted Quality (Score)')
+st.write(float(prediction[0]))
+
+# =================================================
+# 4. MODEL PERFORMANCE SECTION
+# =================================================
+st.header("📉 Model Performance")
+X_all = data.drop('quality', axis=1)
+y_all = data['quality']
+y_pred_all = model.predict(X_all)
+mse = mean_squared_error(y_all, y_pred_all)
+r2 = r2_score(y_all, y_pred_all)
+st.write(f"**Mean Squared Error:** {mse:.2f}")
+st.write(f"**R² Score:** {r2:.2f}")
+
+st.subheader("Residuals Plot")
+fig, ax = plt.subplots()
+sns.scatterplot(x=y_all, y=y_all - y_pred_all, ax=ax)
+ax.axhline(0, color='red', linestyle='--')
+ax.set_xlabel("Actual Quality")
+ax.set_ylabel("Residuals")
+st.pyplot(fig)
+
+st.subheader("Correlation Heatmap of Features")
+fig, ax = plt.subplots(figsize=(10, 6))
+sns.heatmap(data.corr(), annot=True, cmap='coolwarm', ax=ax)
+st.pyplot(fig)
+
+st.subheader("Model Comparison")
+st.write("This section can be used to compare multiple models if available.")
